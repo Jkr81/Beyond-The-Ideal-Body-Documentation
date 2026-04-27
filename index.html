@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beyond the Ideal Body — Roman Project</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone: #c9b99a;
+    --stone-light: #e8dcc8;
+    --stone-dark: #8b7355;
+    --marble: #f5f0e8;
+    --parchment: #ede3ce;
+    --terra: #8b3a2a;
+    --terra-light: #c4522e;
+    --gold: #c9a227;
+    --gold-light: #e8c84a;
+    --ink: #1a1208;
+    --ink-soft: #2d2010;
+    --shadow: rgba(26, 18, 8, 0.6);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--ink);
+    color: var(--stone-light);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 18px;
+    overflow-x: hidden;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6' fill='%23c9a227' opacity='0.7'/%3E%3C/svg%3E") 8 8, auto;
+  }
+
+  /* NOISE TEXTURE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* DECORATIVE BORDER SYSTEM */
+  .roman-border {
+    border: 1px solid var(--gold);
+    position: relative;
+  }
+  .roman-border::before, .roman-border::after {
+    content: '◆';
+    position: absolute;
+    color: var(--gold);
+    font-size: 10px;
+  }
+  .roman-border::before { top: -6px; left: 50%; transform: translateX(-50%); }
+  .roman-border::after { bottom: -6px; left: 50%; transform: translateX(-50%); }
+
+  /* ═══════════════════════════════
+     HERO
+  ═══════════════════════════════ */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 24px;
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 100%, rgba(139,58,42,0.25) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 40% at 20% 20%, rgba(201,162,39,0.08) 0%, transparent 60%),
+      linear-gradient(180deg, #0d0b07 0%, #1a1208 40%, #0f0c07 100%);
+  }
+
+  /* Column decorations */
+  .hero::before, .hero::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 60px;
+    background: repeating-linear-gradient(
+      180deg,
+      transparent 0px,
+      transparent 28px,
+      rgba(201,162,39,0.04) 28px,
+      rgba(201,162,39,0.04) 30px
+    );
+    border-right: 1px solid rgba(201,162,39,0.12);
+  }
+  .hero::before { left: 0; border-right: 1px solid rgba(201,162,39,0.12); }
+  .hero::after { right: 0; border-left: 1px solid rgba(201,162,39,0.12); border-right: none; }
+
+  .hero-ornament {
+    font-family: 'Cinzel', serif;
+    color: var(--gold);
+    font-size: 11px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin-bottom: 28px;
+    animation: fadeDown 1.2s ease both;
+  }
+
+  .hero-rule {
+    width: 280px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 0 auto 36px;
+    animation: fadeIn 1.4s ease both;
+  }
+
+  .hero h1 {
+    font-family: 'Cinzel Decorative', serif;
+    font-weight: 900;
+    font-size: clamp(2rem, 5.5vw, 4.2rem);
+    line-height: 1.15;
+    letter-spacing: 0.03em;
+    color: var(--marble);
+    text-shadow: 0 0 60px rgba(201,162,39,0.3), 0 2px 4px rgba(0,0,0,0.5);
+    margin-bottom: 20px;
+    animation: fadeDown 0.9s ease both;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  .hero-subtitle {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(0.85rem, 1.8vw, 1.05rem);
+    letter-spacing: 4px;
+    color: var(--stone);
+    text-transform: uppercase;
+    margin-bottom: 48px;
+    animation: fadeDown 1.05s ease both;
+  }
+
+  .hero-authors {
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--stone-light);
+    opacity: 0.8;
+    margin-bottom: 60px;
+    animation: fadeIn 1.5s ease both;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--terra);
+    color: var(--marble);
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 16px 40px;
+    border: 1px solid rgba(201,162,39,0.5);
+    position: relative;
+    transition: all 0.3s ease;
+    animation: fadeIn 1.7s ease both;
+    clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+  }
+  .hero-cta:hover {
+    background: var(--terra-light);
+    border-color: var(--gold);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(139,58,42,0.4);
+  }
+  .hero-cta svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 4px;
+    color: var(--stone-dark);
+    text-transform: uppercase;
+    animation: pulse 2.5s ease-in-out infinite;
+  }
+
+  /* ═══════════════════════════════
+     NAV
+  ═══════════════════════════════ */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(13,11,7,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(201,162,39,0.2);
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+  }
+
+  nav a {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--stone);
+    text-decoration: none;
+    padding: 18px 24px;
+    border-bottom: 2px solid transparent;
+    transition: all 0.25s ease;
+  }
+  nav a:hover {
+    color: var(--gold-light);
+    border-bottom-color: var(--gold);
+  }
+  nav .nav-sep {
+    color: rgba(201,162,39,0.3);
+    font-size: 10px;
+  }
+
+  /* ═══════════════════════════════
+     SECTIONS
+  ═══════════════════════════════ */
+  section {
+    padding: 100px 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--terra-light);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(196,82,46,0.4), transparent);
+  }
+
+  h2 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.5rem, 3vw, 2.4rem);
+    font-weight: 600;
+    color: var(--marble);
+    margin-bottom: 40px;
+    line-height: 1.3;
+  }
+
+  p {
+    line-height: 1.8;
+    color: var(--stone-light);
+    opacity: 0.88;
+    margin-bottom: 20px;
+    max-width: 72ch;
+  }
+
+  /* ═══════════════════════════════
+     DIVIDER
+  ═══════════════════════════════ */
+  .roman-divider {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 0 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+    opacity: 0.4;
+  }
+  .roman-divider span { color: var(--gold); font-size: 14px; }
+  .roman-divider::before, .roman-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  /* ═══════════════════════════════
+     OVERVIEW CARDS
+  ═══════════════════════════════ */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 48px;
+    border: 1px solid rgba(201,162,39,0.2);
+  }
+  @media (max-width: 700px) {
+    .overview-grid { grid-template-columns: 1fr; }
+  }
+
+  .overview-card {
+    padding: 40px 32px;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(201,162,39,0.1);
+    transition: background 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .overview-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--terra), var(--gold));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .overview-card:hover { background: rgba(255,255,255,0.05); }
+  .overview-card:hover::before { opacity: 1; }
+
+  .overview-card .icon {
+    font-size: 2rem;
+    margin-bottom: 16px;
+    display: block;
+  }
+  .overview-card h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .overview-card p {
+    font-size: 0.95rem;
+    margin: 0;
+    opacity: 0.75;
+  }
+
+  /* ═══════════════════════════════
+     SPACES
+  ═══════════════════════════════ */
+  .spaces-list { display: flex; flex-direction: column; gap: 3px; margin-top: 48px; }
+
+  .space-item {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 0;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(201,162,39,0.12);
+    transition: border-color 0.3s ease;
+    overflow: hidden;
+  }
+  .space-item:hover { border-color: rgba(201,162,39,0.35); }
+
+  .space-num {
+    background: rgba(201,162,39,0.08);
+    border-right: 1px solid rgba(201,162,39,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.5rem;
+    color: var(--gold);
+    opacity: 0.6;
+    writing-mode: vertical-rl;
+    letter-spacing: 4px;
+    padding: 24px 0;
+  }
+
+  .space-content { padding: 32px 36px; }
+  .space-content h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--marble);
+    margin-bottom: 8px;
+  }
+  .space-content .space-tag {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--terra-light);
+    margin-bottom: 16px;
+    display: block;
+  }
+  .space-content p { font-size: 0.95rem; max-width: 60ch; }
+
+  .space-focus {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .focus-tag {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border: 1px solid rgba(201,162,39,0.25);
+    color: var(--stone);
+    background: rgba(201,162,39,0.06);
+  }
+
+  /* ═══════════════════════════════
+     PRODUCTION LINK
+  ═══════════════════════════════ */
+  .experience-section {
+    padding: 100px 24px;
+    background: linear-gradient(180deg, rgba(139,58,42,0.08) 0%, transparent 60%);
+    border-top: 1px solid rgba(139,58,42,0.2);
+    border-bottom: 1px solid rgba(139,58,42,0.2);
+  }
+
+  .experience-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  @media (max-width: 700px) {
+    .experience-inner { grid-template-columns: 1fr; gap: 48px; }
+  }
+
+  .experience-text h2 { margin-bottom: 20px; }
+  .experience-text p { max-width: 50ch; }
+
+  .experience-link-box {
+    border: 1px solid rgba(201,162,39,0.3);
+    padding: 48px 40px;
+    text-align: center;
+    background: rgba(201,162,39,0.03);
+    position: relative;
+  }
+  .experience-link-box::before {
+    content: '⚱';
+    position: absolute;
+    top: -14px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: var(--gold);
+    font-size: 20px;
+    padding: 0 12px;
+    line-height: 1;
+  }
+
+  .experience-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--stone-dark);
+    margin-bottom: 24px;
+  }
+
+  .big-link {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--marble);
+    background: var(--terra);
+    text-decoration: none;
+    padding: 18px 36px;
+    border: 1px solid rgba(201,162,39,0.4);
+    transition: all 0.3s ease;
+    clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+    margin-bottom: 20px;
+  }
+  .big-link:hover {
+    background: var(--terra-light);
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 16px 48px rgba(139,58,42,0.5);
+  }
+
+  .link-url {
+    display: block;
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    font-size: 0.82rem;
+    color: var(--stone-dark);
+    word-break: break-all;
+    margin-top: 16px;
+    opacity: 0.7;
+  }
+
+  /* ═══════════════════════════════
+     GALLERY
+  ═══════════════════════════════ */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+    margin-top: 48px;
+  }
+
+  @media (max-width: 700px) {
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .gallery-slot {
+    aspect-ratio: 4/3;
+    background:
+      repeating-linear-gradient(
+        45deg,
+        rgba(201,162,39,0.04) 0px,
+        rgba(201,162,39,0.04) 1px,
+        transparent 1px,
+        transparent 14px
+      ),
+      rgba(255,255,255,0.02);
+    border: 1px dashed rgba(201,162,39,0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .gallery-caption {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 10px 14px;
+    background: linear-gradient(transparent, rgba(13,11,7,0.85));
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--stone-light);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 2;
+  }
+  .gallery-slot:hover .gallery-caption { opacity: 1; }
+
+  .gallery-slot img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.9;
+  }
+
+  .gallery-slot .slot-placeholder {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(201,162,39,0.4);
+    text-align: center;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+  }
+  .gallery-slot .slot-icon {
+    font-size: 1.8rem;
+    opacity: 0.3;
+    position: relative;
+    z-index: 1;
+  }
+  .gallery-slot:hover {
+    border-color: rgba(201,162,39,0.5);
+    background-color: rgba(201,162,39,0.06);
+  }
+
+  .gallery-upload-note {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--stone-dark);
+    text-align: center;
+    margin-top: 24px;
+    opacity: 0.6;
+  }
+
+  /* ═══════════════════════════════
+     VIDEO
+  ═══════════════════════════════ */
+  .video-wrapper {
+    margin-top: 48px;
+    position: relative;
+    border: 1px solid rgba(201,162,39,0.2);
+    overflow: hidden;
+    background: #000;
+  }
+  .video-wrapper::before {
+    content: '';
+    display: block;
+    padding-top: 56.25%;
+  }
+  .video-wrapper iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .video-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    background: rgba(13,11,7,0.85);
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  .video-placeholder:hover { background: rgba(13,11,7,0.7); }
+  .video-placeholder .play-btn {
+    width: 80px; height: 80px;
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+  .video-placeholder:hover .play-btn {
+    background: rgba(201,162,39,0.15);
+    transform: scale(1.1);
+    box-shadow: 0 0 40px rgba(201,162,39,0.3);
+  }
+  .play-btn svg { width: 28px; height: 28px; fill: var(--gold); margin-left: 5px; }
+  .video-placeholder p {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin: 0;
+    opacity: 0.7;
+  }
+
+  /* ═══════════════════════════════
+     TECH / CHALLENGES
+  ═══════════════════════════════ */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    margin-top: 48px;
+  }
+  @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+
+  .list-group h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(201,162,39,0.2);
+  }
+
+  .list-group ul { list-style: none; padding: 0; }
+  .list-group li {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--stone-light);
+    opacity: 0.82;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .list-group li::before {
+    content: '◆';
+    color: var(--terra);
+    font-size: 8px;
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+
+  /* ═══════════════════════════════
+     TAKEAWAYS
+  ═══════════════════════════════ */
+  .takeaways-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+    margin-top: 48px;
+  }
+  @media (max-width: 700px) { .takeaways-grid { grid-template-columns: 1fr; } }
+
+  .takeaway-card {
+    padding: 40px 32px;
+    background: rgba(255,255,255,0.015);
+    border: 1px solid rgba(201,162,39,0.1);
+    position: relative;
+  }
+  .takeaway-card .num {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 3rem;
+    color: rgba(201,162,39,0.08);
+    position: absolute;
+    top: 20px; right: 24px;
+    line-height: 1;
+  }
+  .takeaway-card p {
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ═══════════════════════════════
+     FOOTER
+  ═══════════════════════════════ */
+  footer {
+    padding: 60px 24px;
+    text-align: center;
+    border-top: 1px solid rgba(201,162,39,0.15);
+    position: relative;
+  }
+  footer::before {
+    content: 'SPQR';
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.7rem;
+    letter-spacing: 6px;
+    color: rgba(201,162,39,0.1);
+    display: block;
+    margin-bottom: 24px;
+  }
+  footer p {
+    font-size: 0.8rem;
+    color: var(--stone-dark);
+    max-width: none;
+    margin: 0 auto 8px;
+    opacity: 0.6;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* ═══════════════════════════════
+     ANIMATIONS
+  ═══════════════════════════════ */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.3; transform: translateX(-50%) translateY(0); }
+    50% { opacity: 0.7; transform: translateX(-50%) translateY(6px); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════
+     HERO
+═══════════════════════════════ -->
+<section style="padding:0; max-width:none;">
+  <div class="hero">
+    <div class="hero-ornament">VR Experience · Roman Studies · Interactive Documentation</div>
+    <div class="hero-rule"></div>
+    <h1>Beyond the<br><em>Ideal Body</em></h1>
+    <div class="hero-subtitle">Representations of Women in Roman Art</div>
+    <div class="hero-authors">Josh Rocha &amp; Celia Bauer</div>
+    <a href="#overview" class="hero-cta">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,9 12,15 18,9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Explore the Project
+    </a>
+    <div class="scroll-hint">↓ &nbsp; Scroll to Explore &nbsp; ↓</div>
+  </div>
+</section>
+
+<!-- NAV -->
+<nav>
+  <a href="#overview">Overview</a>
+  <span class="nav-sep">·</span>
+  <a href="#spaces">Spaces</a>
+  <span class="nav-sep">·</span>
+  <a href="#experience">Experience</a>
+  <span class="nav-sep">·</span>
+  <a href="#gallery">Gallery</a>
+  <span class="nav-sep">·</span>
+  <a href="#walkthrough">Walkthrough</a>
+  <span class="nav-sep">·</span>
+  <a href="#technical">Technical</a>
+</nav>
+
+<!-- ═══════════════════════════════
+     OVERVIEW
+═══════════════════════════════ -->
+<section id="overview">
+  <div class="section-label">I — Project Overview</div>
+  <h2>An Immersive Journey Through Roman Representation</h2>
+  <p>This interactive VR experience challenges the idea that Roman representations of women were purely idealized and lacking individuality. Users move through three immersive environments—a museum gallery, a civic forum, and a domestic villa—interacting with statues and objects through visual panels and audio narration.</p>
+  <p>While these figures often appear visually similar, the environments they inhabit reveal something deeper: women as civic leaders, intellectuals, and economic participants. The experience transforms passive observation into active historical interpretation.</p>
+
+  <div class="overview-grid">
+    <div class="overview-card">
+      <span class="icon">🏛️</span>
+      <h3>3 VR Environments</h3>
+      <p>Museum gallery, Pompeii civic forum, and Roman domestic villa — each with distinct narrative intent.</p>
+    </div>
+    <div class="overview-card">
+      <span class="icon">🎮</span>
+      <h3>Interaction Design</h3>
+      <p>Clickable statues and artifacts triggering image panels and audio narration throughout each space.</p>
+    </div>
+    <div class="overview-card">
+      <span class="icon">🎙️</span>
+      <h3>Audio Narration</h3>
+      <p>Spatial audio trigger system per object, layered with historical context panels in 3D space.</p>
+    </div>
+  </div>
+</section>
+
+<div class="roman-divider"><span>◆</span></div>
+
+<!-- ═══════════════════════════════
+     SPACES
+═══════════════════════════════ -->
+<section id="spaces">
+  <div class="section-label">II — VR Spaces &amp; Narrative Structure</div>
+  <h2>Three Worlds. One Argument.</h2>
+  <p>Each environment represents a distinct lens through which Roman women's identity was constructed — and through which modern audiences often misread it. Together they form a cumulative argument about context, visibility, and agency.</p>
+
+  <div class="spaces-list">
+    <div class="space-item">
+      <div class="space-num">I</div>
+      <div class="space-content">
+        <span class="space-tag">Space One · Museum Gallery</span>
+        <h3>The Modern Gaze</h3>
+        <p>A contemporary-style gallery filled with idealized Roman female sculptures, designed to feel like a modern museum — not ancient Rome. The Small and Large Herculaneum Women appear nearly identical and lack inscriptions, highlighting how individual identity is lost through curatorial framing.</p>
+        <div class="space-focus">
+          <span class="focus-tag">Herculaneum Women</span>
+          <span class="focus-tag">Identity Loss</span>
+          <span class="focus-tag">Modern Curation</span>
+        </div>
+      </div>
+    </div>
+    <div class="space-item">
+      <div class="space-num">II</div>
+      <div class="space-content">
+        <span class="space-tag">Space Two · Pompeii Forum</span>
+        <h3>Civic Presence</h3>
+        <p>A reconstructed 1st-century civic space with temples, colonnades, and honorific statues. Dominated by male representation, yet centered on the Building and Statue of Eumachia — evidence that women held visible and powerful roles in public life despite idealized appearances.</p>
+        <div class="space-focus">
+          <span class="focus-tag">Eumachia</span>
+          <span class="focus-tag">Civic Power</span>
+          <span class="focus-tag">Public Life</span>
+        </div>
+      </div>
+    </div>
+    <div class="space-item">
+      <div class="space-num">III</div>
+      <div class="space-content">
+        <span class="space-tag">Space Three · Roman Villa</span>
+        <h3>Intellect &amp; Labor</h3>
+        <p>A domestic interior reframing women as thinkers and workers. The Portrait of a Young Woman with Stylus and a Relief with Market Scene together show women as active contributors — educated, economically engaged, and fully present within Roman society.</p>
+        <div class="space-focus">
+          <span class="focus-tag">Portrait with Stylus</span>
+          <span class="focus-tag">Market Relief</span>
+          <span class="focus-tag">Intellectual Life</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="roman-divider"><span>◆</span></div>
+
+<!-- ═══════════════════════════════
+     PRODUCTION LINK
+═══════════════════════════════ -->
+<div class="experience-section" id="experience">
+  <div class="experience-inner">
+    <div class="experience-text">
+      <div class="section-label" style="max-width:1100px">III — Live Experience</div>
+      <h2>Enter the Virtual Forum</h2>
+      <p>The fully interactive multi-space VR experience is available now via MUD Foundation's verse platform. No installation required — explore the three environments directly in your browser.</p>
+      <p>Built using MUD Foundation / XR Creator tools with a reusable raycasting interaction system, toggle-based UI panels, and audio triggers across all three scenes.</p>
+    </div>
+    <div class="experience-link-box">
+      <div class="experience-label">Production Build · Live</div>
+      <a href="https://verse.mud.foundation/dsPUL2c/beyond-the-ideal-body-1" target="_blank" class="big-link">
+        ▶ &nbsp; Launch Experience
+      </a>
+      <span class="link-url">verse.mud.foundation/dsPUL2c/<br>beyond-the-ideal-body-1</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     GALLERY
+═══════════════════════════════ -->
+<section id="gallery">
+  <div class="section-label">IV — Project Gallery</div>
+  <h2>Documentation Images</h2>
+  <p>Screenshots, environment renders, and in-world captures from the three VR spaces. Add your project images below.</p>
+
+  <div class="gallery-grid">
+    <div class="gallery-slot">
+      <img src="Museum.jpg" alt="Museum Gallery">
+      <div class="gallery-caption">Museum Gallery</div>
+    </div>
+    <div class="gallery-slot">
+      <img src="Herculaneum.jpg" alt="Herculaneum Women">
+      <div class="gallery-caption">Herculaneum Women</div>
+    </div>
+    <div class="gallery-slot">
+      <img src="Pompeii.jpg" alt="Pompeii Forum">
+      <div class="gallery-caption">Pompeii Forum</div>
+    </div>
+    <div class="gallery-slot">
+      <img src="Eumachia.jpg" alt="Eumachia Statue">
+      <div class="gallery-caption">Eumachia Statue</div>
+    </div>
+    <div class="gallery-slot">
+      <img src="Villa.jpg" alt="Roman Villa">
+      <div class="gallery-caption">Roman Villa</div>
+    </div>
+    <div class="gallery-slot">
+      <img src="Stylus.jpg" alt="Portrait with Stylus">
+      <div class="gallery-caption">Portrait with Stylus</div>
+    </div>
+  </div>
+</section>
+
+<div class="roman-divider"><span>◆</span></div>
+
+<!-- ═══════════════════════════════
+     YOUTUBE WALKTHROUGH
+═══════════════════════════════ -->
+<section id="walkthrough">
+  <div class="section-label">V — Video Walkthrough</div>
+  <h2>Guided Tour of the Experience</h2>
+  <p>Watch a full walkthrough of all three environments — the Museum Gallery, Pompeii Forum, and Roman Villa — demonstrating the interaction system, audio narration, and narrative progression.</p>
+
+  <div class="video-wrapper" id="videoWrapper">
+    <iframe src="https://www.youtube.com/embed/P29ygtWnNls" allow="fullscreen; picture-in-picture" allowfullscreen></iframe>
+  </div>
+</section>
+
+<div class="roman-divider"><span>◆</span></div>
+
+<!-- ═══════════════════════════════
+     TECHNICAL
+═══════════════════════════════ -->
+<section id="technical">
+  <div class="section-label">VI — Technical &amp; Reflections</div>
+  <h2>Implementation &amp; Lessons</h2>
+  <p>Built on MUD Foundation / XR Creator, the project centers on a reusable interaction architecture designed to function consistently across three distinct 3D environments.</p>
+
+  <div class="two-col">
+    <div class="list-group">
+      <h3>Technical Stack</h3>
+      <ul>
+        <li>Raycasting interaction system for object selection</li>
+        <li>Toggle-based UI panels positioned in 3D space</li>
+        <li>Per-object audio trigger system</li>
+        <li>Reusable interaction logic across all scenes</li>
+        <li>MUD Foundation / XR Creator platform</li>
+        <li>2D-to-3D asset conversion pipeline</li>
+      </ul>
+    </div>
+    <div class="list-group">
+      <h3>Key Challenges</h3>
+      <ul>
+        <li>Reliable clickability in a 3D/XR environment</li>
+        <li>Syncing visual panels and audio triggers</li>
+        <li>Maintaining consistency across all three spaces</li>
+        <li>Historical accuracy within asset limitations</li>
+        <li>Intuitive interactions without on-screen instructions</li>
+        <li>Small-space design communicating multiple ideas</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="margin-top:80px">
+    <div class="section-label">Future Improvements</div>
+    <div class="two-col">
+      <div class="list-group">
+        <h3>Experience Design</h3>
+        <ul>
+          <li>Guided path or unlocking progression system</li>
+          <li>Expand interaction types beyond click (XR gestures)</li>
+          <li>Enhanced UI animations and transitions</li>
+          <li>Deeper audio layering / spatial sound design</li>
+        </ul>
+      </div>
+      <div class="list-group">
+        <h3>Visual Fidelity</h3>
+        <ul>
+          <li>Higher-quality architectural and figure assets</li>
+          <li>Improved lighting polish across all environments</li>
+          <li>Better-quality Roman forum asset sourcing</li>
+          <li>More nuanced domestic space atmosphere</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="roman-divider"><span>◆</span></div>
+
+<!-- ═══════════════════════════════
+     TAKEAWAYS
+═══════════════════════════════ -->
+<section>
+  <div class="section-label">VII — Key Takeaways</div>
+  <h2>What the Forum Teaches</h2>
+
+  <div class="takeaways-grid">
+    <div class="takeaway-card">
+      <span class="num">I</span>
+      <p>Interaction design can transform how audiences interpret historical content — the mechanics <em>are</em> the argument.</p>
+    </div>
+    <div class="takeaway-card">
+      <span class="num">II</span>
+      <p>Context — the environment — is just as important as the object itself in communicating identity and power.</p>
+    </div>
+    <div class="takeaway-card">
+      <span class="num">III</span>
+      <p>Even simple mechanics create meaningful engagement when deployed with intention across a coherent narrative arc.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════
+     FOOTER
+═══════════════════════════════ -->
+<footer>
+  <p>Beyond the Ideal Body — Josh Rocha &amp; Celia Bauer</p>
+  <p style="font-size:0.65rem; letter-spacing:1px;">Built with MUD Foundation · XR Creator</p>
+</footer>
+
+<script>
+  // ——— SCROLL FADE-IN ———
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(el => {
+      if (el.isIntersecting) {
+        el.target.style.opacity = '1';
+        el.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.space-item, .overview-card, .takeaway-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
